@@ -2,6 +2,7 @@
 
 Authors: Paula Reyero Lobo ([paula.reyero-lobo@open.ac.uk](mailto:paula.reyero-lobo@open.ac.uk)), Enrico Daga ([enrico.daga@open.ac.uk](mailto:enrico.daga@open.ac.uk)), Harith Alani ([harith.alani@open.ac.uk](mailto:harith.alani@open.ac.uk))
 
+![dependency graph](module_dependency.png)
 
 The resulting output of this code corresponds to the directory tree bellow.  We release these files
 in the following open [repository](https://doi.org/10.5281/zenodo.6379344):
