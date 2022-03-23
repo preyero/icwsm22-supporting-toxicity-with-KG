@@ -75,7 +75,7 @@ def get_text_annotations(onto_dict, texts, verbose=False):
 def main():
     # load ontology and ontology dict of class and individuals
     gsso = load_gsso()
-    gsso_cls_dict, gsso_indv_dict = create_gsso_dict(gsso)
+    gsso_cls_dict, gsso_indv_dict = _create_gsso_dict(gsso)
 
     # annotate and export tf texts
     print('Importing tf dataset')

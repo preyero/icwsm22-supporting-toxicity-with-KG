@@ -1,5 +1,10 @@
-# Download files from this open [repository]()
+# Supporting Toxicity Detection with Knowledge Graphs
 
+Authors: Paula Reyero Lobo ([paula.reyero-lobo@open.ac.uk](mailto:paula.reyero-lobo@open.ac.uk)), Enrico Daga ([enrico.daga@open.ac.uk](mailto:enrico.daga@open.ac.uk)), Harith Alani ([harith.alani@open.ac.uk](mailto:harith.alani@open.ac.uk))
+
+
+The resulting output of this code corresponds to the directory tree bellow.  We release these files
+in the following open [repository]():
 ```
 icwsm22-supporting-toxicity-with-KG
 │   readme.md  
@@ -7,11 +12,9 @@ icwsm22-supporting-toxicity-with-KG
 │   │   all_data_splits.csv
 │   │
 │   └───gsso_annotations
-│       │   file111.txt
-│       │   file112.txt
+│       │   file11.csv
 │   └───gsso_annotations_inferred
-│       │   file111.txt
-│       │   file112.txt
+│       │   file21.csv
 │   │   identity_data_splits.csv
 │   │   readme.md
 └───owl
@@ -25,3 +28,10 @@ icwsm22-supporting-toxicity-with-KG
 │   └───saved_dict
 └───scripts
 ```
+
+Example usage:
+
+Using the command line from project folder to detect gender and sexual orientation entities in the text:
+
+`$ python scripts/gsso_annotate.py`
+
