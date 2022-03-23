@@ -1,4 +1,4 @@
-# Supporting Toxicity Detection with Knowledge Graphs
+# Supporting Online Toxicity Detection with Knowledge Graphs
 
 Authors: Paula Reyero Lobo ([paula.reyero-lobo@open.ac.uk](mailto:paula.reyero-lobo@open.ac.uk)), Enrico Daga ([enrico.daga@open.ac.uk](mailto:enrico.daga@open.ac.uk)), Harith Alani ([harith.alani@open.ac.uk](mailto:harith.alani@open.ac.uk))
 
@@ -16,9 +16,6 @@ icwsm22-supporting-toxicity-with-KG
 │   └───gsso_annotations_inferred
 │       │   file21.csv
 │   │   identity_data_splits.csv
-│   │   readme.md
-└───owl
-│   │   gsso.owl
 │   │   readme.md
 └───results
 │   └───1_freq_tables
