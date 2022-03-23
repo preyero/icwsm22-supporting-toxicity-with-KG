@@ -4,7 +4,7 @@ Authors: Paula Reyero Lobo ([paula.reyero-lobo@open.ac.uk](mailto:paula.reyero-l
 
 
 The resulting output of this code corresponds to the directory tree bellow.  We release these files
-in the following open [repository]():
+in the following open [repository](https://doi.org/10.5281/zenodo.6379344):
 ```
 icwsm22-supporting-toxicity-with-KG
 │   readme.md  
