@@ -17,9 +17,9 @@ except ModuleNotFoundError:
     from scripts.dataCollect import get_tf_data, get_identity_data
 
 try:
-    from gsso import load_gsso, create_gsso_dict, get_entity_annotation_dict
+    from gsso import load_gsso, _create_gsso_dict, get_entity_annotation_dict
 except ModuleNotFoundError:
-    from scripts.gsso import load_gsso, create_gsso_dict, get_entity_annotation_dict
+    from scripts.gsso import load_gsso, _create_gsso_dict, get_entity_annotation_dict
 
 # Default variables
 
