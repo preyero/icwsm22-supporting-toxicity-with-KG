@@ -24,13 +24,15 @@ Parameters:
 Otherwise, from Jigsaw Toxicity 1.8M.
 * `DEFAULT_N`: Int. Number of texts to sample randomly.
 
+Dependency: `gsso.py`
+
 ## gsso_annotate_inferred.py
 
 Script to get superclasses of class entities (`'cls_entities'`) and types of individual entities (`'ind_entities'`)
 
 Input: exported annotated files using 'gsso_annotate.py' and copied to `gsso_annotations` folder.
 
-Dependency: owlready2 functions from script (/functionalities/sparql_owlready2.py)
+Dependency: `gsso.py, /functionalities/sparql_owlready2.py` 
 
 Parameters:
 * `sample`: if used a sample in `gsso_annotate.py` .
@@ -45,7 +47,7 @@ Heatmaps of frequencies of protected group categories of asserted and inferred f
 And a sorted list of most likely human annotation errors, i.e., texts not annotated as related to gender or sexual 
 orientation but with entities that frequently appear in gender and so related language (`FN`).
 
-Dependency: functions from the `plots.py` helper script.
+Dependency: `plots.py, utils.py, gsso.py` 
 
 Parameters:
 
