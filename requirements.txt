@@ -1,0 +1,8 @@
+pandas==1.3.4
+numpy==1.19.2
+Owlready2==0.35
+nltk==3.5
+matplotlib==3.3.2
+tensorflow_datasets==4.3.0
+seaborn==0.11.0
+torch==1.7.1

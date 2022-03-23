@@ -29,9 +29,19 @@ icwsm22-supporting-toxicity-with-KG
 └───scripts
 ```
 
+Set up the project using a virtual environment:
+
+```bash
+    $ python -m venv <env_name>
+    $ source <env_name>/bin/activate
+    (<env_name>) $ python -m pip install -r requirements.txt
+```
+
 Example usage:
 
 Using the command line from project folder to detect gender and sexual orientation entities in the text:
 
-`$ python scripts/gsso_annotate.py`
+```bash
+    (<env_name>) $ python scripts/gsso_annotate.py
+```
 
