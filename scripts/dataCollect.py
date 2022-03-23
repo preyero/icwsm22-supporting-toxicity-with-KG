@@ -10,7 +10,7 @@ import tensorflow_datasets as tfds
 
 import numpy as np
 import pandas as pd
-import os, torch, time
+import os, time
 from ast import literal_eval
 
 PROJ_DIR = os.getcwd()

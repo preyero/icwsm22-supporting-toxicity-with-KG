@@ -476,7 +476,7 @@ def export_error_candidates(search_dict, args_space):
 
 
 def main():
-    print('Starting gsso annotation analysis: \n In all data: {} \n Using stopwords: {} '.format(USE_ALL_DATA, USE_STOPWORDS))
+    print('Starting gsso annotation analysis: \n In all data: {} \n'.format(USE_ALL_DATA))
     if not USE_ALL_DATA:
         print('... sample: {}'.format(sample))
 
