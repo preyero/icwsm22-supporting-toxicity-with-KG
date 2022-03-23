@@ -1,6 +1,8 @@
 """
-Data collection: prepares dataset with Tensorflow (splits) and Kaggle (text context, counts)
+Data collection: prepares dataset with Tensorflow (splits) and Kaggle (text context, annotator counts)
 for 1.8M and 448k identities (including protected group engineering).
+
+
 """
 
 # https://github.com/tensorflow/datasets/blob/master/tensorflow_datasets/text/civil_comments.py
@@ -49,6 +51,7 @@ PROT_ATTR_CONTEXT = list(ATTRIBUTES_DICT.keys())
 
 print('Starting data collection from {}'.format(PROJ_DIR))
 
+
 def get_tf_data(text_context=TEXT_CONTEXT, annotation_count=ANNOTATION_COUNT, text_col=TEXT_COL):
     # IMPORT TENSORFLOW DATASET TO GET SPLITS
     print('Importing data with all 1.8M comments')
@@ -70,8 +73,7 @@ def get_tf_data(text_context=TEXT_CONTEXT, annotation_count=ANNOTATION_COUNT, te
                 df['split'] = [split]*df.shape[0]
             data_dict[split] = df
 
-        data = pd.concat([data_dict['train'], data_dict['validation'], data_dict['test']],
-                         ignore_index=True)
+        data = pd.concat([data_dict['train'], data_dict['validation'], data_dict['test']], ignore_index=True)
         data.to_csv(fname)
     else:
         print('... importing from saved file')
@@ -182,7 +184,7 @@ def main():
     print('Importing tf dataset')
     data = get_tf_data()
 
-    data = get_identity_data(data)
+    data_identities = get_identity_data(data)
 
 
 if __name__ == '__main__':

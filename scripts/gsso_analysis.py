@@ -3,8 +3,6 @@ Analysis of GSSO ontology term coverage
 in hate speech detection data
 
 25 November 2021
-
-**Note**: repeated entities in annotations. Create a Set() with annotations.
 """
 import os, time
 import numpy as np
@@ -17,13 +15,13 @@ except ModuleNotFoundError:
     from scripts.gsso import load_gsso, collect_gsso_dict, create_iri2label_from_dict, get_label_from_iri_list, get_iri_from_label_list
 
 try:
-    from utils import flatten, get_stop_words_list, select_keys_from_dict
+    from utils import flatten, select_keys_from_dict
 except ModuleNotFoundError:
-    from scripts.utils import flatten, get_stop_words_list, select_keys_from_dict
+    from scripts.utils import flatten, select_keys_from_dict
 try:
-    from plots import export_freq_plot, export_freq_plots
+    from plots import export_freq_plot
 except ModuleNotFoundError:
-    from scripts.plots import export_freq_plot, export_freq_plots
+    from scripts.plots import export_freq_plot
 
 
 PROJ_DIR = os.getcwd()
@@ -34,21 +32,21 @@ RES_DIR = os.path.join(PROJ_DIR, 'results')
 if not os.path.isdir(RES_DIR):
     os.mkdir(RES_DIR)
 
-USE_STOPWORDS = False
 USE_ALL_DATA = False
-thr_long_analysis=600 # over that, only use all entities and all
+thr_long_analysis=600
+# over that, only use all entities (cls+ind) and all (i.e. asserted+inferred)
 
 # in all samples: analyse for onto annotations of all_entities (assert+inf) and all (cls+ind)
 N_PROT_ATTR_DICT = {'gender':88790, 'sexual_orientation':12713, 'race': 42906,
                    'religion':70149, 'disability': 5559, 'none': 260337}
 
 if not USE_ALL_DATA:
-    # Use samples for code development and for more extensive analysis levels:
-    # subannot (asserted, inferred, and both), subonto (classes, indv, and both)
+    # Use samples for equal group representation
     sample = 5559
     N_PROT_ATTR_DICT = {key:sample for key in N_PROT_ATTR_DICT}
 
 PROT_ATTR_CONTEXT = list(N_PROT_ATTR_DICT.keys())
+
 
 # Import a dictionary of PROT_ATTR keys with their annotated dataframe
 def import_onto_annotation_dict(fname_label, dirname, annotation_cols):
@@ -128,41 +126,17 @@ def collect_data_analysis():
 
 
 # Create np.array matrix of occurrences of entities in gsso_dict
-def _get_tf_matrix2(annotation_df,col, gsso_dict):
-    """
-    Trying to reduce comp time: _get_tf_matrix2(annotation_dict[S],'{}_entities'.format(subonto), gsso_dict[subonto])
-ValueError: shape mismatch: value array of shape (500,)  could not be broadcast to indexing result of shape (14280,0)
-
-    Term-occurrence matrix N (texts) x M (entities) given a:
-     - M entities (i.e., gsso_dict from gsso.get_entity_annotation_dict)
-     - N annotations of the texts (i.e, onto_annotations_col Mx1) """
-
-    iri_list = [k.iri for k in gsso_dict.keys()]
-    # TF-matrix as a NxM dataframe (N texts, M entities)
-    tf_matrix = pd.DataFrame(columns=iri_list)
-
-    def fill_occurrences(row_annotation, iri_array):
-        entities_found = np.array(list(set(row_annotation)))
-        tf_row = np.in1d(iri_array, entities_found) #true where iri_array_i in ent found
-        tf_row = list(map(int, tf_row)) # from booleean to int
-        return tf_row
-
-    iri_array = np.array(iri_list)
-    tf_matrix.loc[:,iri_list] = annotation_df[col].apply(lambda annot_row: fill_occurrences(annot_row, iri_array))
-
-    return tf_matrix
-
 def _get_tf_matrix(annotation_col, gsso_dict):
     """
     Term-occurrence matrix N (texts) x M (entities) given a:
      - M entities (i.e., gsso_dict from gsso.get_entity_annotation_dict)
-     - N annotations of the texts (i.e, onto_annotations_col Mx1) """
+     - N annotations of the texts (i.e, annotation_col Mx1) """
 
     iri_list = [k.iri for k in gsso_dict.keys()]
     # TF-matrix as a NxM dataframe (N texts, M entities)
     tf_matrix = pd.DataFrame(columns=iri_list)
 
-    # Fill occurrences:  slower
+    # Fill occurrences:
     for i, annotation_list in enumerate(annotation_col):
         entities_found = list(set(annotation_list))
         # print(entities_found)
@@ -194,7 +168,6 @@ def create_tf_matrixes_dict(annotation_dict, gsso_dict):
         # For each attribute, create TF matrix with each gsso_dict key annotation column
         for S in PROT_ATTR_CONTEXT:
             tf_subonto[S] = _get_tf_matrix(annotation_dict[S]['{}_entities'.format(subonto)], gsso_dict[subonto])
-            # tf_subonto[S] = _get_tf_matrix2(annotation_dict[S],'{}_entities'.format(subonto), gsso_dict[subonto])
             print('... ** filled {}: {}'.format(S, tf_subonto[S].shape))
         tf[subonto] = tf_subonto
     print("Executed in %s seconds." % str(time.time()-t0))
@@ -259,19 +232,6 @@ def get_common_entities(freq_dict, freq_args={'subannot': 'all_ent', 'subonto': 
     return most_common_list
 
 
-# export list of iri if main label is in sw list
-def get_stopword_entities(library, iri2label_dict):
-    """ Get list of IRI if label is in stop_word_list """
-    print('Computing LIST STOPWORDS: {}'.format(library))
-    sw_l = get_stop_words_list(library=library)
-    print('... # sw: {}'.format(len(sw_l)))
-    stop_word_entities = [iri for iri, label in iri2label_dict.items()
-                          if label.lower() in sw_l]
-    stop_word_entities = list(set(stop_word_entities))
-    print('... # sw found: {}'.format(len(stop_word_entities)))
-    return stop_word_entities
-
-
 # create table with top N entities of a freq_dict
 def create_top_freq_table(freq_dict, iri2label_dict, n, o_filename=None, stopwords=None):
     print('Creating tables with top-{} frequency terms'.format(n))
@@ -329,17 +289,10 @@ def create_top_freq_plots(table_dict, freq_dict, iri2label_dict, args={'subonto'
         else:
             title = '{}_{}'.format(subannot, subonto)
 
-        if not S:
-            print('... exporting multiplots')
-            subp = {'x':3, 'y':2} # one figure for all 6 S.
-            export_freq_plots(table_dict[subannot][subonto], freq_dict[subannot][subonto],iri2label_dict,
-                              o_path,title, n_tag,
-                              figsize=(20,6))
-        else:
-            print('... exporting uniplot')
-            # single freq plot of topN for each Si
-            table_dict_S = select_keys_from_dict(table_dict[subannot][subonto], [S])
-            export_freq_plot(table_dict_S, freq_dict[subannot][subonto],iri2label_dict,
+        print('... exporting uniplot: {}'.format(S))
+        # single freq plot of topN for each Si
+        table_dict_S = select_keys_from_dict(table_dict[subannot][subonto], [S])
+        export_freq_plot(table_dict_S, freq_dict[subannot][subonto],iri2label_dict,
                               o_path,title, n_tag)
     print("Executed in %s seconds." % str(time.time()-t0))
     return
@@ -436,9 +389,7 @@ def compute_annot_reliability_score(search_df, full_freq_dict, subannot, subonto
     freq_avg_matrix = prob_pos.subtract(prob_neg)
 
     # compute score for each row
-    scores = tf_df_pos.apply(lambda tf_row: _compute_annot_reliability_score(tf_row,
-                                                                             tf_df_pos.columns,
-                                                                             freq_avg_matrix),
+    scores = tf_df_pos.apply(lambda tf_row: _compute_annot_reliability_score(tf_row, tf_df_pos.columns,freq_avg_matrix),
                                  axis=1)
 
     print("Executed in %s seconds." % str(time.time()-t0))
@@ -551,6 +502,7 @@ def main():
     n_tag = get_tag_n_prot_attr()
     title_tag = 'tf_dict'
 
+    # subannot (asserted, inferred, and both), subonto (classes, indv, and both)
     tf_dict = {}
     for subannot in annot_dict.keys():
         filename = os.path.join(o_dir,'_'.join([title_tag,PROT_ATTR_CONTEXT[0],subannot, 'all',n_tag])+'.csv')
@@ -572,17 +524,10 @@ def main():
         freq_dict[subannot] = compute_freq_from_tf_matrixes(tf_dict[subannot])
 
 
-    # IRI_STOPWORD list: i.e., over a freq (e.g, 0.50) in all S
+    # IRI_STOPWORD list: i.e., over a freq (e.g, 0.50) in all S, for plotting
     IRI_COMMON = get_common_entities(freq_dict, thr=0.50)
     if len(IRI_COMMON)<30:
         print([gsso_iri2label_dict[iri] for iri in IRI_COMMON])
-
-    # STOPWORDS list: i.e., if entity label[0] is in sw (from different libraries)
-    sw_libraries = ['nltk','gensim','sklearn']
-    STOPWORDS = {}
-    for sw_library in sw_libraries:
-        STOPWORDS[sw_library] = get_stopword_entities(sw_library, gsso_iri2label_dict)
-        print_labels(STOPWORDS[sw_library], gsso_iri2label_dict)
 
     # 3. Collect top-N in tables: not using STOPWORDS
     table_dict, n = {}, 30
@@ -593,41 +538,10 @@ def main():
         table_dict[subannot] = create_top_freq_table(freq_dict[subannot], gsso_iri2label_dict,
                                                      n, o_filename, stopwords=IRI_COMMON)
 
-    # ... using stopwords
-    if USE_STOPWORDS:
-        print('... USING STOPWORDS')
-        table_dict_sw = {}
-        for sw in STOPWORDS.keys():
-            for subannot in annot_dict.keys():
-                table_dict_SW = {}
-                n_tag = get_tag_n_prot_attr()
-                o_filename = '{}_{}_{}_top{}.csv'.format(sw, subannot, n_tag, n)
-
-                table_dict_SW[subannot] = create_top_freq_table(freq_dict[subannot], gsso_iri2label_dict, n, o_filename,
-                                                               stopwords=IRI_COMMON+STOPWORDS[sw])
-            table_dict_sw[sw] = table_dict_SW
-            del table_dict_SW
-
     # plot top-N frequencies
     for S in PROT_ATTR_CONTEXT:
         args_plot = {'subonto':'all', 'S': S, 'sw_tag':None}
         create_top_freq_plots(table_dict, freq_dict, gsso_iri2label_dict, args=args_plot)
-
-    # ... usings stopwords
-    if USE_STOPWORDS:
-        print('... USING STOPWORDS')
-        for sw in STOPWORDS.keys():
-            for S in PROT_ATTR_CONTEXT:
-                args_plot = {'subonto': 'all', 'S': S, 'sw_tag': sw}
-                create_top_freq_plots(table_dict_sw[sw], freq_dict, gsso_iri2label_dict, args=args_plot)
-
-
-    # ... provide an example
-    # plot_args = {'subonto': 'all', 'S': 'gender', 'sw_tag':None}
-    # create_freq_plots(table_dict, freq_dict, gsso_iri2label_dict, args=plot_args)
-
-    # ... TMP: export figures with 6 subplots. There is an error.
-    # create_top_freq_plots(table_dict, freq_dict, gsso_iri2label_dict)
 
     # 4. Plot frequencies in all_ent of the classes that represent the 6 annotation categories
     S_ATTR_categories = ['gender', 'sexual orientation', 'race', 'disability', 'religion']
@@ -663,8 +577,6 @@ def main():
     search_cand_dict = {}
     search_human_info_dict, search_cand_dict['space_fn'], search_cand_dict['space_fp'] = export_error_candidates(search_dict, args_df_space)  # inc. human annot
 
-
-    # TODO: create wordcloud of annotation columns
 
 
 

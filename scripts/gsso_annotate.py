@@ -21,21 +21,16 @@ try:
 except ModuleNotFoundError:
     from scripts.gsso import load_gsso, create_gsso_dict, get_entity_annotation_dict
 
-# try:
-#     nltk.data.find('stopwords')
-# except LookupError:
-#     nltk.download('stopwords')
-
 # Default variables
 
 PROJ_DIR = os.getcwd()
 print("Hello from {}".format(PROJ_DIR))
 
 DATA_DIR = os.path.join(PROJ_DIR, 'data')
-
-DEFAULT_N = 5559 # 260337 # len(data)= 1999514, len(data_identities)=
+# define the size of the sample to annotate
+DEFAULT_N = 5559 # e.g. len(data)= 1999514
+# define from which group to sample
 DEFAULT_SAMPLE_GROUP = 'none' # e.g., [None, 'gender', 'sexual_orientation', 'none']
-# sampling from any group in each protected characteristic
 DEFAULT_ANNOTATED_FILENAME = '{}_{}_data_splits_gsso.csv'.format(DEFAULT_SAMPLE_GROUP, DEFAULT_N)
 print('... to export: {}'.format(DEFAULT_ANNOTATED_FILENAME))
 

@@ -51,29 +51,3 @@ def export_freq_plot(index_dict, freq_dict, iri2label_dict, o_path, title, n_tag
     if o_path is not None:
         filename = '{}_{}top{}_{}.png'.format(title,S,n_top,n_tag)
         fig.savefig(os.path.join(o_path, filename), bbox_inches='tight')
-
-
-# TODO: multiple plots in one figure (2x3 and sharex)
-# seaborn: AttributeError: 'numpy.ndarray' object has no attribute 'spines'
-# to try: heatmap with plt https://matplotlib.org/stable/gallery/images_contours_and_fields/image_annotated_heatmap.html
-
-# TMP: for some reason not working ax
-def export_freq_plots(index_dict, freq_dict, iri2label_dict, o_path, title, n_tag,
-                      subplots=None, figsize=(36,6)):
-    # y (cols) is second param and can be changed (data.columns)
-    S_list = list(index_dict.keys()) # prot attributes
-    if not subplots:
-        fig, axs = plt.subplots(1, len(S_list), figsize=figsize, sharex=True, dpi=500)
-    else:
-        fig, axs = plt.subplots(subplots['x'], subplots['y'], figsize=figsize, sharex=True, dpi=500)
-    plt.tight_layout()
-
-    # Add to each axis each one of the yvalues
-    for i, ax in enumerate(axs):
-        S = S_list[i]
-        n_top = uni_heatmap(index_dict, freq_dict, S, iri2label_dict, ax)
-        # plt.xticks(rotation=45)
-
-    if o_path is not None:
-            filename = '{}_{}top{}_{}_multiplot.png'.format(title, S_list, n_top, n_tag)
-            fig.savefig(os.path.join(o_path, filename), bbox_inches='tight')

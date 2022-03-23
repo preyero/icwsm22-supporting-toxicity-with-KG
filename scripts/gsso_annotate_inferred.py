@@ -30,10 +30,10 @@ print("Hello from {}".format(PROJ_DIR))
 
 DATA_DIR = os.path.join(PROJ_DIR, 'data')
 
-
+# From all the data
 N_PROT_ATTR_DICT = {'gender':88790, 'sexual_orientation':12713, 'race': 42906,
                'religion':70149, 'disability': 5559, 'none': 260337}
-# N_PROT_ATTR_DICT = {'none':10} # Uncomment line for an example
+# or from a sample
 sample = 5559 # take a sample
 N_PROT_ATTR_DICT = {key:sample for key in N_PROT_ATTR_DICT}
 

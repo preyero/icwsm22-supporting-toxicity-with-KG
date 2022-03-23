@@ -38,8 +38,8 @@ def get_entity_annotation_dict(subonto):
     return subonto_dict
 
 
-def create_gsso_dict(gsso):
-    """ Store ontology as dictionary for ontology manipulation """
+def _create_gsso_dict(gsso):
+    """ Store ontology as dictionary for ontology manipulation: classes and individuals """
     gsso_cls, gsso_indv = list(gsso.classes()), list(gsso.individuals())
     print('Retrieved {} classes and {} individuals\n'.format(len(gsso_cls), len(gsso_indv)))
 
@@ -48,8 +48,8 @@ def create_gsso_dict(gsso):
     return gsso_cls_dict, gsso_indv_dict
 
 
-def create_gsso_dict_all(gsso):
-    """ Store ontology as dict for ontology manipulation"""
+def _create_gsso_dict_all(gsso):
+    """ Store ontology as dict for ontology manipulation: all entities """
     gsso_all = list(gsso.classes()) + list(gsso.individuals())
     print('Retrieved {} entities \n'.format(len(gsso_all)))
 
@@ -62,14 +62,14 @@ def collect_gsso_dict(gsso):
     """ Export gsso as a dict: keys are cls, ind, all (ie cls+ind)"""
     print('Importing gsso as dict')
     t0 = time.time()
-    gsso_cls_dict, gsso_ind_dict = create_gsso_dict(gsso)
-    gsso_all_dict = create_gsso_dict_all(gsso)
+    gsso_cls_dict, gsso_ind_dict = _create_gsso_dict(gsso)
+    gsso_all_dict = _create_gsso_dict_all(gsso)
     print("Executed in %s seconds." % str(time.time()-t0))
 
     return gsso_cls_dict, gsso_ind_dict, gsso_all_dict
 
 
-# Using GSSO with IRI and main label (text detection is done with gsso_dict
+# Using GSSO with IRI and main label (text detection is done with gsso_dict)
 def create_iri2label_from_dict(gsso_dict):
     """ Creating a dict of IRI: label[0] using a (sub)ontology dict"""
     gsso_iri2label_dict= {k.iri:v[0] for k, v in gsso_dict.items()}
