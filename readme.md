@@ -1,8 +1,10 @@
 # Supporting Online Toxicity Detection with Knowledge Graphs
 
-[![DOI](https://zenodo.org/badge/461912754.svg)](https://zenodo.org/badge/latestdoi/461912754)
+Reference to the repository: [![DOI](https://zenodo.org/badge/461912754.svg)](https://zenodo.org/badge/latestdoi/461912754)
 
 Authors: Paula Reyero Lobo ([paula.reyero-lobo@open.ac.uk](mailto:paula.reyero-lobo@open.ac.uk)), Enrico Daga ([enrico.daga@open.ac.uk](mailto:enrico.daga@open.ac.uk)), Harith Alani ([harith.alani@open.ac.uk](mailto:harith.alani@open.ac.uk))
+
+This repository supports the paper "Supporting Online Toxicity Detection with Knowledge Graphs" (link to [preprint](http://oro.open.ac.uk/82776)) presented at ICWSM 2022. In this work, we deal with the problem of annotating toxic speech corpora and use semantic knowledge about gender and sexual orientation to identify missing target information about these groups. The workflow followed for this experiment is presented below:
 
 ![dependency graph](module_dependency.png)
 
@@ -29,7 +31,7 @@ icwsm22-supporting-toxicity-with-KG
 └───scripts
 ```
 
-Set up the project using a virtual environment:
+To set up the project using a virtual environment:
 
 ```bash
     $ python -m venv <env_name>
@@ -43,5 +45,4 @@ Using the command line from project folder to detect gender and sexual orientati
 
 ```bash
     (<env_name>) $ python scripts/gsso_annotate.py
-```
-
+``` 
