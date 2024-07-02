@@ -4,7 +4,7 @@ Reference to the repository: [![DOI](https://zenodo.org/badge/461912754.svg)](ht
 
 Authors: Paula Reyero Lobo ([paula.reyero-lobo@open.ac.uk](mailto:paula.reyero-lobo@open.ac.uk)), Enrico Daga ([enrico.daga@open.ac.uk](mailto:enrico.daga@open.ac.uk)), Harith Alani ([harith.alani@open.ac.uk](mailto:harith.alani@open.ac.uk))
 
-This repository supports the paper "Supporting Online Toxicity Detection with Knowledge Graphs" (link to [preprint](http://oro.open.ac.uk/82776)) presented at ICWSM 2022. In this work, we deal with the problem of annotating toxic speech corpora and use semantic knowledge about gender and sexual orientation to identify missing target information about these groups. The workflow followed for this experiment is presented below:
+This repository supports the paper "Supporting Online Toxicity Detection with Knowledge Graphs" (link to [paper](https://doi.org/10.1609/icwsm.v16i1.19398)) presented at ICWSM 2022. In this work, we deal with the problem of annotating toxic speech corpora and use semantic knowledge about gender and sexual orientation to identify missing target information about these groups. The workflow followed for this experiment is presented below:
 
 ![dependency graph](module_dependency.png)
 
