@@ -6,7 +6,6 @@ using the knowledge in GSSO ontology
 """
 
 import os, time
-import nltk
 import numpy as np
 import pandas as pd
 from owlready2 import *
